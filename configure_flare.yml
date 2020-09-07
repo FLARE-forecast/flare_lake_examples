@@ -63,10 +63,6 @@ sss_depth: 8.0
 # Weather forcing options
 ######################
 
-met_file: .na #manual-data/met_full_postQAQC.csv
-met_raw_obs_fname:
-    - carina-data/FCRmet.csv
-    - manual-data/Met_final_2015_2019.csv
 specified_metfile: .na #NA #paste0(manual_data_location, "/met_full_postQAQC.csv")
 
 use_future_met: TRUE
@@ -77,7 +73,7 @@ downscale_met: TRUE
 #Downscale the coarse resolutoin NOAA data to the local
 #site using the meterology station at the lake
 
-
+noaa_location: FCRE
 
 downscaling_coeff: manual-data/debiased.coefficients.2018_07_12_2019_07_11.RData
 
@@ -103,15 +99,9 @@ future_inflow_temp_error: 0.943
 doc_scalar: 3.0
 
 specified_inflow1: .na #manual-data/FCR_weir_inflow_2013_2019_20200624_allfractions_2poolsDOC.csv
-inflow1_file: .na #manual-data/inflow_postQAQC.csv
-inflow_raw_file1:
-    - diana-data/FCRweir.csv
-    - manual-data/inflow_for_EDI_2013_06Mar2020.csv
 
-inflow_file2: .na
 specified_inflow2: .na #manual-data/FCR_wetland_inflow_2013_2019_20200713_allfractions_2DOCpools.csv
 
-outflow_file1: manual-data/FCR_spillway_outflow_newEDI_SUMMED_WeirWetland_2013_2018_20190912.csv
 specified_outflow1: .na #manual-data/FCR_spillway_outflow_SUMMED_WeirWetland_2013_2019_20200615.csv
 
 
@@ -236,12 +226,4 @@ diagnostics_names:  [extc_coef,
                      PHY_diatom_fT,
                      rad]
 
-#########################################
-# Archiving options
-#######################################
-
-#Pull data from github?
-#Push results to github?
-pull_from_git: TRUE
-push_to_git: FALSE
 

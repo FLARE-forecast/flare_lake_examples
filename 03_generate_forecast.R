@@ -3,28 +3,6 @@ run_config <- yaml::read_yaml("/Users/quinn/Dropbox/Research/SSC_forecasting/FLA
 
 config$run_config <- run_config
 
-#library(tidyverse)
-
-#Load the NOAA GEFS script because they aren't officially part of the
-#package yet
-#source(system.file("process_downscale_GEFS.R", package="flare"))
-#source(system.file("process_GEFS.R", package="flare"))
-#source(system.file("check_CI.R", package="flare"))
-#source(system.file("aggregate_to_daily.R", package="flare"))
-#source(system.file("aggregate_obs_to_hrly.R", package="flare"))
-#source(system.file("ShortWave_to_hrly.R", package="flare"))
-#source(system.file("daily_debias_from_coeff.R", package="flare"))
-#source(system.file("downscale_met.R", package="flare"))
-#source(system.file("fit_downscaling_parameters.R", package="flare"))
-#source(system.file("daily_to_6hr.R", package="flare"))
-#source(system.file("spline_to_hourly.R", package="flare"))
-#source(system.file("prep_for.R", package="flare"))
-#source(system.file("plot_downscaled_met.R", package="flare"))
-#source(system.file("add_noise.R", package="flare"))
-#source(system.file("repeat_6hr_to_hrly.R", package="flare"))
-#source(system.file("compare_output_to_obs.R", package="flare"))
-#source(system.file("solar_geom.R", package="flare"))
-
 start_datetime_local <- lubridate::as_datetime(paste0(config$run_config$start_day_local," ",config$run_config$start_time_local), tz = config$local_tzone)
 end_datetime_local <- lubridate::as_datetime(paste0(config$run_config$end_day_local," ",config$run_config$start_time_local), tz = config$local_tzone)
 
@@ -249,8 +227,7 @@ if(missing_met  == FALSE){
                        "LongWave" = "LongWave",
                        "Rain" = "Rain")
 
-  temp_met_file<- flare::process_downscale_GEFS(folder = config$code_folder,
-                                         noaa_location = config$noaa_location,
+  temp_met_file<- flare::process_downscale_GEFS(noaa_location = config$noaa_location,
                                          input_met_file = cleaned_met_file,
                                          working_directory,
                                          n_ds_members = config$n_ds_members,
@@ -321,8 +298,7 @@ if(forecast_days > 0 & config$use_future_met){
                        "LongWave" = "LongWave",
                        "Rain" = "Rain")
 
-  met_file_names[] <- flare::process_downscale_GEFS(folder = config$code_folder,
-                                             noaa_location = file.path(config$data_location, config$noaa_location),
+  met_file_names[] <- flare::process_downscale_GEFS(noaa_location = file.path(config$data_location, config$noaa_location),
                                              input_met_file = cleaned_met_file,
                                              working_directory,
                                              n_ds_members = config$n_ds_members,
@@ -365,8 +341,7 @@ inflow_outflow_files <- flare::create_inflow_outflow_file(full_time_local,
                                                    input_file_tz = "EST",
                                                    start_forecast_step,
                                                    inflow_file1 = cleaned_inflow_file,
-                                                   inflow_file2 = config$inflow_file2,
-                                                   outflow_file1 = config$outflow_file1,
+                                                   inflow_file2 = NA,
                                                    chemistry_file = cleaned_inflow_file,
                                                    local_tzone = config$local_tzone,
                                                    met_file_names,
@@ -513,7 +488,7 @@ if(!restart_present){
         init$states[jj, , m] <- combined_initial_conditions[jj, ] + q_v
       }
       if(jj > 1){
-      init$states[jj,which(init$states[jj, , m]) < 0.0 , m] <- 0.0
+      init$states[jj,which(init$states[jj, , m] < 0.0) , m] <- 0.0
       }
     }
   }
