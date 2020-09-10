@@ -1,6 +1,7 @@
 # Examples and test of configurations for FLARE
 
-## Download Data
+## Set paths
+
 `lake_directory <- "/Users/quinn/Dropbox/Research/SSC_forecasting/FLARE_package/flare_lake_examples/fcre/"`
 
 `qaqc_data_location <- file.path(lake_directory, "qaqc_data")`
@@ -10,6 +11,8 @@
 `if(!dir.exists(qaqc_data_location)){
   dir.create(qaqc_data_location)
 }`
+
+## Download Data
 
 `source(file.path(lake_directory, "01_download_data.R"))`
 
