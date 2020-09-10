@@ -1,0 +1,36 @@
+&aed2_models
+   models = 'aed2_sedflux','aed2_tracer','aed2_noncohesive','aed2_oxygen'
+/
+&aed2_sedflux
+   sedflux_model = 'Constant2D'
+/
+&aed2_sed_const2d
+   n_zones = 2
+   Fsed_oxy = -30.6018, 14.3925
+/
+&aed2_tracer
+   retention_time = .true.
+   num_tracers = 1
+   decay = 0, 0
+   Fsed = 0, 0
+/
+&aed2_noncohesive
+   num_ss = 1
+   ss_initial = 1, 1
+   Ke_ss = 0.06, 0.063
+   settling = 1
+   w_ss = -0.03, -0.001
+   d_ss = 2e-06, 1e-05
+   rho_ss = 1500, 1800
+   resuspension = 0
+   epsilon = 0.007
+   tau_0 = 0.03, 0.03
+   tau_r = 1
+   Ktau_0 = 0.001
+/
+&aed2_oxygen
+   oxy_initial = 225
+   Ksed_oxy = 6.342158
+   theta_sed_oxy = 1.08
+   Fsed_oxy_variable = 'SDF_Fsed_oxy'
+/
