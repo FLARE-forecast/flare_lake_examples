@@ -143,5 +143,5 @@ saved_file <- flare::write_forecast_netcdf(enkf_output,
 flare::create_flare_eml(file_name = saved_file,
                         enkf_output)
 
-unlist(config$run_config$execute_location)
+unlist(config$run_config$execute_location, recursive = TRUE)
 
