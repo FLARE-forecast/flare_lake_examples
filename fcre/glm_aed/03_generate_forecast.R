@@ -1,6 +1,6 @@
 ##### Read configuration files
 
-forecast_location <- "/Users/quinn/Dropbox/Research/SSC_forecasting/FLARE_package/flare_lakes/fcre/glm_aed/"
+#forecast_location <- "/Users/quinn/Dropbox/Research/SSC_forecasting/FLARE_package/flare_lakes/fcre/glm_aed/"
 config <- yaml::read_yaml(file.path(forecast_location, "configuration_files","configure_flare.yml"))
 run_config <- yaml::read_yaml(file.path(forecast_location, "configuration_files","run_configuration.yml"))
 

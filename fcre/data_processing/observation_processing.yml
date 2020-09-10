@@ -1,6 +1,3 @@
-data_location: /Users/quinn/Dropbox/Research/SSC_forecasting/SCC_data/
-qaqc_data_location: /Users/quinn/Dropbox/Research/SSC_forecasting/run_flare_package/qaqc_data
-
 ##########################
 # Lake information
 ###########################
@@ -67,6 +64,9 @@ realtime_insitu_location: mia-data
 realtime_met_station_location: carina-data
 manual_data_location: manual-data
 realtime_inflow_data_location: diana-data
+
+specified_inflow1: manual-data/FCR_weir_inflow_2013_2019_20200624_allfractions_2poolsDOC.csv
+specified_outflow1: manual-data/FCR_spillway_outflow_SUMMED_WeirWetland_2013_2019_20200615.csv
 
 insitu_obs_fname:
     - mia-data/Catwalk.csv
