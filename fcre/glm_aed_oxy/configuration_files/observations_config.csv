@@ -1,0 +1,3 @@
+﻿state_names_obs,obs_units,obs_sd,target_variable,distance_threshold
+temp,degC,0.07117918,temperature,0.15
+OXY_oxy,mmol m-3,26.86071,oxygen,0.15

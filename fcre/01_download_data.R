@@ -1,6 +1,6 @@
-lake_directory <- "/Users/quinn/Dropbox/Research/SSC_forecasting/FLARE_package/flare_fcr"
+config <- yaml::read_yaml(file.path(lake_directory,"data_processing", "observation_processing.yml"))
 
-config <- yaml::read_yaml(file.path(lake_directory,"observation_processing.yml"))
+config$data_location <- data_location
 
 if(!file.exists(file.path(config$data_location, config$realtime_insitu_location))){
     stop("Missing temperature data GitHub repo")
@@ -33,3 +33,4 @@ system(paste0("git pull"))
 
 setwd(file.path(config$data_location, config$realtime_inflow_data_location))
 system(paste0("git pull"))
+

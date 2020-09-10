@@ -29,6 +29,8 @@ met_raw_obs_fname:
 
 downscaling_coeff: manual-data/debiased.coefficients.2018_07_12_2019_07_11.RData
 
+nldas: manual-data/FCR_GLM_NLDAS_010113_123119_GMTadjusted.csv
+
 #####################
 #### INFLOW AND OUTFLOW
 #####################
@@ -100,13 +102,13 @@ target_variables:
 averaging_period:
     - "1 hour"
     - "1 hour"
-    - "1 hour"
-    - "1 hour"
-    - "1 hour"
-    - "1 hour"
-    - "1 hour"
-    - "1 hour"
-    - "1 hour"
+    - "1 day"
+    - "1 day"
+    - "1 day"
+    - "1 day"
+    - "1 day"
+    - "1 day"
+    - "1 day"
     
 averaging_period_starting_hour: "07:00:00"
 

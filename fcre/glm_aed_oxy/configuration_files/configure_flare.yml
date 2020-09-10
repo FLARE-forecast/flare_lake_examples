@@ -38,72 +38,6 @@ metadata:
 
 forecast_project_id: test
 
-##########################
-# Management Options
-###########################
-
-simulate_sss: TRUE
-#Include SSS in data assimilation
-forecast_sss: FALSE
-#Run forecasts without SSS turned on
-use_specified_sss: TRUE
-# Use SSS from file in forecast
-forecast_sss_flow: 1000
-#m3/day rate of flow if SSS turned on in forecast
-forecast_sss_oxy: 500
-#umol/m3  of oxygen if SSS turned on in forecast
-sss_fname: manual-data/FCR_SSS_inflow_2013_2020.csv
-specified_sss_inflow_file: .na #manual-data/FCR_SSS_inflow_2013_2019_20200701_allfractions_2DOCpools.csv
-specified_sss_outflow_file: .na
-
-sss_inflow_factor: 1.0
-sss_depth: 8.0
-
-#####################
-# Weather forcing options
-######################
-
-specified_metfile: .na #NA #paste0(manual_data_location, "/met_full_postQAQC.csv")
-
-use_future_met: TRUE
-#TRUE = use NOAA forecast for "Future"
-#FALSE = use observed weather for "Future"; only works if "forecasting" past dates
-
-downscale_met: TRUE
-#Downscale the coarse resolutoin NOAA data to the local
-#site using the meterology station at the lake
-
-noaa_location: FCRE
-
-downscaling_coeff: manual-data/debiased.coefficients.2018_07_12_2019_07_11.RData
-
-#file name of previous downscaling coefficients
-#use NA if not using an existing file
-
-met_ds_obs_start: 2018-07-12
-met_ds_obs_end: 2019-07-11
-#Dates to use to developing the downscaling coefficient
-
-missing_met_data_threshold: 100
-
-#####################
-#### INFLOW AND OUTFLOW
-#####################
-
-use_future_inflow: FALSE
-future_inflow_flow_coeff: [0.0010803, 0.9478724, 0.3478991]
-future_inflow_flow_error: 0.00965
-future_inflow_temp_coeff: [0.20291, 0.94214, 0.04278]
-future_inflow_temp_error: 0.943
-
-doc_scalar: 3.0
-
-specified_inflow1: .na #manual-data/FCR_weir_inflow_2013_2019_20200624_allfractions_2poolsDOC.csv
-
-specified_inflow2: .na #manual-data/FCR_wetland_inflow_2013_2019_20200713_allfractions_2DOCpools.csv
-
-specified_outflow1: .na #manual-data/FCR_spillway_outflow_SUMMED_WeirWetland_2013_2019_20200615.csv
-
 
 ############################
 # Run information
@@ -111,29 +45,10 @@ specified_outflow1: .na #manual-data/FCR_spillway_outflow_SUMMED_WeirWetland_201
 
 model_name: glm_aed #other is "null"
 
-base_GLM_nml: glm3.nml
-base_AED_nml: aed2_20200701_2DOCpools.nml
-base_AED_phyto_pars_nml: aed2_phyto_pars_30June2020.nml
-base_AED_zoop_pars_nml: aed2_zoop_pars.nml
-
-#################################
-### Uncertainty simulated
-################################
-
-uncert_mode: 1
-#Choose the types of uncertainty include in foreast
-#1 = all types
-#2 = no uncertainty
-#3 = only process uncertainty
-#4 = only NOAA weather forecast uncertainty
-#5 = only initial condition uncertainty
-#6 = only initial condition uncertainty and no state updating  with EnKF
-#7 = only parameter uncertainty
-#8 = only meteorology downscaling uncertainty
-#9 = no sources of uncertainty and no state updating with EnKF
-single_run: FALSE
-#Removes uncertainty and only simulates 3 ensemble members
-
+base_GLM_nml: configuration_files/glm3.nml
+base_AED_nml: configuration_files/aed2.nml
+base_AED_phyto_pars_nml: configuration_files/aed2_phyto_pars.nml
+base_AED_zoop_pars_nml: configuration_files/aed2_zoop_pars.nml
 
 #All sources of uncertainty and data used to constrain
 use_obs_constraint: TRUE
@@ -146,7 +61,11 @@ met_downscale_uncertainty: TRUE
 inflow_process_uncertainty: TRUE
 
 
-
+use_future_inflow: TRUE
+future_inflow_flow_coeff: [0.0010803, 0.9478724, 0.3478991]
+future_inflow_flow_error: 0.00965
+future_inflow_temp_coeff: [0.20291, 0.94214, 0.04278]
+future_inflow_temp_error: 0.943
 #########################
 ### Depth information
 #########################
@@ -174,12 +93,25 @@ default_snow_thickness_init: 0.0
 default_white_ice_thickness_init: 0.0
 default_blue_ice_thickness_init: 0.0
 
+#########
+#  Management
+########
+
+simulate_sss: TRUE
+sss_depth: 8.0
+use_specified_sss: TRUE
+specified_sss_inflow_file: .na
+specified_sss_outflow_file: .na
+forecast_sss_flow: 1000
+forecast_sss_oxy: 500
+#umol/m3  of oxygen if SSS turned on in forecast
+sss_fname: manual-data/FCR_SSS_inflow_2013_2020.csv
+sss_inflow_factor: 0.25
+
 ##############################
 ##  EnKF setup
 ##############################
 ensemble_size:  105
-n_ds_members: 5 #10
-n_inflow_outflow_members:  105
 localization_distance: .na #distance in meters were covariances in the model error are used
 vert_decorr_length: 4.0
 no_negative_states: TRUE
@@ -194,13 +126,13 @@ par_file: parameter_calibration_config.csv
 ###  Observation information
 ######################################
 
-obs_config_file: observations_config_ch4_dic.csv
+obs_config_file: observations_config.csv
 
 #########################################
 ###  State information
 #########################################
 
-states_config_file: states_config_ch4_dic.csv
+states_config_file: states_config.csv
 
 #carbon to chlorophyll ratio (mg C/mg chla)
 #12 g/ mole of C vs. X g/ mole of chla
@@ -212,18 +144,6 @@ states_config_file: states_config_ch4_dic.csv
 #######################################
 
 diagnostics_names:  [extc_coef,
-                    PHY_cyano_fI,
-                    PHY_cyano_fNit,
-                     PHY_cyano_fPho,
-                    PHY_cyano_fT,
-                     PHY_green_fI,
-                    PHY_green_fNit,
-                     PHY_green_fPho,
-                     PHY_green_fT,
-                     PHY_diatom_fI,
-                     PHY_diatom_fNit,
-                     PHY_diatom_fPho,
-                     PHY_diatom_fT,
                      rad]
 
 

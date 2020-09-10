@@ -68,9 +68,20 @@ in_situ_qaqc <- function(insitu_obs_fname,
       dplyr::mutate(datetime = time_breaks[time_class]) %>%
       dplyr::mutate(variable = config$target_variable[i]) %>%
       dplyr::select(datetime, depth, variable, value) %>%
-      dplyr::rename(timestamp = datetime)
+      dplyr::mutate(date = lubridate::as_date(datetime))
 
-      d_clean <- rbind(d_clean,  d_curr)
+    if(config$averaging_period[i] == "1 hour"){
+      d_curr <- d_curr %>%
+      dplyr::mutate(hour = lubridate::hour(datetime)) %>%
+      dplyr::filter(hour == lubridate::hour(first_day))
+    }else{
+      d_curr <- d_curr %>%
+        dplyr::mutate(hour = NA)
+    }
+
+    d_curr <- d_curr %>% dplyr::select(-datetime)
+
+    d_clean <- rbind(d_clean,  d_curr)
   }
 
   d_clean <- d_clean %>% tidyr::drop_na(value)
@@ -82,8 +93,15 @@ in_situ_qaqc <- function(insitu_obs_fname,
                                local_tzone  = config$local_tzone,
                                focal_depths = config$focal_depths)
 
+    d_secchi <- d_secchi %>%
+      dplyr::mutate(date = lubridate::as_date(timestamp)) %>%
+      dplyr::mutate(hour = NA) %>%
+      dplyr::select(-timestamp)
+
     d_clean <- rbind(d_clean,d_secchi)
   }
+
+  d_clean <- d_clean %>% select(date, hour, depth, value, variable)
 
   readr::write_csv(d_clean, cleaned_observations_file_long)
 }
