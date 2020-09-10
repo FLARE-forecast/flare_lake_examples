@@ -1,5 +1,5 @@
 restart_file: .na
-sim_name: test
+sim_name: test_glm_aed_sss
 forecast_days: 0
 start_day_local: 2018-07-12
 start_time_local: 07:00:00
