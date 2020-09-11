@@ -1,7 +1,8 @@
 extract_CTD <- function(fname,
                         input_file_tz,
                         local_tzone,
-                        focal_depths){
+                        focal_depths,
+                        config){
 
   d <- read_csv(fname, guess_max = 1000000,
                 col_types = readr::cols()) %>%

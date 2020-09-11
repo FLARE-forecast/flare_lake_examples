@@ -13,14 +13,16 @@ in_situ_qaqc <- function(insitu_obs_fname,
                           maintenance_file = maintenance_file,
                           input_file_tz = "EST",
                           focal_depths,
-                          local_tzone = config$local_tzone)
+                          local_tzone = config$local_tzone,
+                          config = config)
 
   if(exists("ctd_fname")){
     if(!is.na(ctd_fname)){
       d_ctd <- extract_CTD(fname = ctd_fname,
                            input_file_tz = "EST",
                            local_tzone = config$local_tzone,
-                           focal_depths = config$focal_depths)
+                           focal_depths = config$focal_depths,
+                           config = config)
       d <- rbind(d,d_ctd)
     }
   }

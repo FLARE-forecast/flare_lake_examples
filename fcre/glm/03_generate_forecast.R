@@ -6,7 +6,7 @@ run_config <- yaml::read_yaml(file.path(forecast_location, "configuration_files"
 
 config$run_config <- run_config
 config$run_config$forecast_location <- forecast_location
-config$run_config$execute_location <- file.path(forecast_location,"working_directory")
+#config$run_config$execute_location <- file.path(forecast_location,"working_directory")
 
 if(!dir.exists(config$run_config$execute_location)){
   dir.create(config$run_config$execute_location)
@@ -110,8 +110,9 @@ aux_states_init$lake_depth <- init$lake_depth
 aux_states_init$salt <- init$salt
 
 #Run EnKF
-enkf_output <- flare::run_EnKF(states_init = init$states,
+enkf_output <- flare::run_enkf_forecast(states_init = init$states,
                                pars_init = init$pars,
+                               aux_states_init = aux_states_init,
                                obs = obs,
                                obs_sd = obs_config$obs_sd,
                                model_sd = states_config$model_sd,
@@ -119,14 +120,14 @@ enkf_output <- flare::run_EnKF(states_init = init$states,
                                met_file_names = met_file_names,
                                inflow_file_names = inflow_file_names,
                                outflow_file_names = outflow_file_names,
-                               sim_start_datetime = start_datetime_local,
-                               sim_end_datetime = end_datetime_local,
+                               start_datetime = start_datetime_local,
+                               end_datetime = end_datetime_local,
                                forecast_start_datetime = forecast_start_datetime_local,
                                config = config,
                                pars_config = pars_config,
                                states_config = states_config,
-                               obs_config = obs_config,
-                               aux_states_init = aux_states_init
+                               obs_config = obs_config
+
 )
 
 # Save forecast

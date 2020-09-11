@@ -3,7 +3,8 @@ temp_oxy_chla_qaqc <- function(realtime_file,
                                maintenance_file,
                                input_file_tz,
                                focal_depths,
-                               local_tzone){
+                               local_tzone,
+                               config){
 
   CATDATA_COL_NAMES <- c("DateTime", "RECORD", "CR6_Batt_V", "CR6Panel_Temp_C", "ThermistorTemp_C_surface",
                          "ThermistorTemp_C_1", "ThermistorTemp_C_2", "ThermistorTemp_C_3", "ThermistorTemp_C_4",

@@ -5,5 +5,5 @@
 
 #file_name <- saved_file
 flare::plotting_general(file_name = saved_file,
-                        qaqc_location)
+                        qaqc_location = qaqc_data_location)
 
