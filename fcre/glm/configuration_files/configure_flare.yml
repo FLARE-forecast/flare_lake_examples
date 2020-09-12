@@ -72,7 +72,7 @@ modeled_depths: [0.10, 0.33, 0.67,
 ##############################
 ##  EnKF setup
 ##############################
-ensemble_size:  420
+ensemble_size:  210
 localization_distance: .na #distance in meters were covariances in the model error are used
 vert_decorr_length: 4.0
 no_negative_states: TRUE

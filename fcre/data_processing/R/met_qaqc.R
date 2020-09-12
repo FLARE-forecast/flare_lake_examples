@@ -128,7 +128,8 @@ met_qaqc <- function(realtime_file,
 
   d$time <- lubridate::with_tz(d$time, tzone = "UTC")
 
-
+  d <- d %>%
+    tidyr::drop_na()
 
   if(!is.null(nldas)){
 
@@ -162,22 +163,20 @@ met_qaqc <- function(realtime_file,
 
   }else{
 
-    print("Gap filling with a spline")
+  t <- seq(min(d$time), max(d$time), by = "1 hour")
+  cont_time <- tibble(time = t)
 
-    t <- seq(min(d$time), max(d$time), by = "1 hour")
-    cont_time <- tibble(time = t)
+  d_full <- dplyr::left_join(cont_time, d, by = "time")
 
-    d_full <- dplyr::left_join(cont_time, d, by = "time")
-
-    d_full <- d_full %>%
-      mutate(air_temperature = imputeTS::na_interpolation(air_temperature, option = "linear"),
-             air_pressure = imputeTS::na_interpolation(air_pressure, option = "linear"),
-             relative_humidity = imputeTS::na_interpolation(relative_humidity, option = "linear"),
-             surface_downwelling_longwave_flux_in_air = imputeTS::na_interpolation(surface_downwelling_longwave_flux_in_air, option = "linear"),
-             surface_downwelling_shortwave_flux_in_air = imputeTS::na_interpolation(surface_downwelling_shortwave_flux_in_air, option = "linear"),
-             precipitation_flux = imputeTS::na_interpolation(precipitation_flux, option = "linear"),
-             specific_humidity = imputeTS::na_interpolation(specific_humidity, option = "linear"),
-             wind_speed = imputeTS::na_interpolation(wind_speed, option = "linear"))
+  d_full <- d_full %>%
+    mutate(air_temperature = imputeTS::na_interpolation(air_temperature, option = "linear"),
+           air_pressure = imputeTS::na_interpolation(air_pressure, option = "linear"),
+           relative_humidity = imputeTS::na_interpolation(relative_humidity, option = "linear"),
+           surface_downwelling_longwave_flux_in_air = imputeTS::na_interpolation(surface_downwelling_longwave_flux_in_air, option = "linear"),
+           surface_downwelling_shortwave_flux_in_air = imputeTS::na_interpolation(surface_downwelling_shortwave_flux_in_air, option = "linear"),
+           precipitation_flux = imputeTS::na_interpolation(precipitation_flux, option = "linear"),
+           specific_humidity = imputeTS::na_interpolation(specific_humidity, option = "linear"),
+           wind_speed = imputeTS::na_interpolation(wind_speed, option = "linear"))
   }
 
   model_name <- "observed-met"
