@@ -21,6 +21,7 @@ local_tzone: "EST"
 ##########################
 
 metadata:
+    forecast_project_id: test
     generate_eml: TRUE
     abstract: "This is where a longer description of the forest can be added"
     forecast_title: FLARE
@@ -36,7 +37,7 @@ metadata:
         electronicMailAddress:  "INSERT"
         id: INSERT ORCID
 
-forecast_project_id: test
+
 
 
 ############################
