@@ -56,17 +56,15 @@ in_situ_qaqc <- function(insitu_obs_fname,
   d_clean <- NULL
   for(i in 1:length(config$target_variable)){
     print(paste0("Extracting ",config$target_variable[i]))
-    depth_breaks <- c(config$depths_bins_top)
+    #depth_breaks <- sort(c(bins1, bins2))
     time_breaks <- seq(first_day, last_day, by = config$averaging_period[i])
 
     d_curr <- d %>%
       dplyr::filter(variable == config$target_variable[i],
                     method %in% config$measurement_methods[[i]]) %>%
-      dplyr::mutate(depth_class = cut(depth, breaks = depth_breaks, labels = NULL, right = FALSE)) %>%
       dplyr::mutate(time_class = cut(timestamp, breaks = time_breaks, labels = FALSE)) %>%
-      dplyr::group_by(time_class, depth_class) %>%
+      dplyr::group_by(time_class, depth) %>%
       dplyr::summarize(value = mean(value, na.rm = TRUE), .groups = "drop") %>%
-      dplyr::mutate(depth = config$depths_bins_top[depth_class]) %>%
       dplyr::mutate(datetime = time_breaks[time_class]) %>%
       dplyr::mutate(variable = config$target_variable[i]) %>%
       dplyr::select(datetime, depth, variable, value) %>%

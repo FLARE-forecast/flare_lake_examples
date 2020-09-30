@@ -114,7 +114,7 @@ met_qaqc <- function(realtime_file,
 
   d$air_pressure <- d$air_pressure * 1000
 
-  d$specific_humidity <-  noaaGEFSpoint::rh2qair(rh = d$relative_humidity,
+  d$specific_humidity <-  noaaGEFSpoint:::rh2qair(rh = d$relative_humidity,
                                                  T = d$air_temperature,
                                                  press = d$air_pressure)
 
