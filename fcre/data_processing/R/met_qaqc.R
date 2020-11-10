@@ -6,9 +6,28 @@ met_qaqc <- function(realtime_file,
                      nldas = NULL){
 
   if(!is.na(qaqc_file)){
-    d1 <- readr::read_csv(realtime_file, skip = 3, guess_max = 100000, col_types = readr::cols())
-    d_names <- readr::read_csv(realtime_file, skip = 1, n_max = 3, col_types = readr::cols())
-    names(d1) <- names(d_names)
+    d1 <- readr::read_csv(realtime_file,
+                          col_names = c("TIMESTAMP","RECORD","BattV","PTemp_C","PAR_Den_Avg","PAR_Tot_Tot","BP_kPa_Avg","AirTC_Avg","RH","Rain_mm_Tot","WS_ms_Avg","WindDir","SR01Up_Avg","SR01Dn_Avg","IR01UpCo_Avg","IR01DnCo_Avg","NR01TK_Avg","Albedo_Avg"),
+                          col_types = list(
+                            TIMESTAMP = readr::col_datetime(format = ""),
+                            RECORD = readr::col_integer(),
+                            BattV = readr::col_double(),
+                            PTemp_C = readr::col_double(),
+                            PAR_Den_Avg = readr::col_double(),
+                            PAR_Tot_Tot = readr::col_double(),
+                            BP_kPa_Avg = readr::col_double(),
+                            AirTC_Avg = readr::col_double(),
+                            RH = readr::col_double(),
+                            Rain_mm_Tot = readr::col_double(),
+                            WS_ms_Avg = readr::col_double(),
+                            WindDir = readr::col_double(),
+                            SR01Up_Avg = readr::col_double(),
+                            SR01Dn_Avg = readr::col_double(),
+                            IR01UpCo_Avg = readr::col_double(),
+                            IR01DnCo_Avg = readr::col_double(),
+                            NR01TK_Avg = readr::col_double(),
+                            Albedo_Avg = readr::col_double())) %>%
+      dplyr::slice(-c(1,2,3,4))
 
     #d1 <- d1[-85572, ]
 
@@ -16,7 +35,53 @@ met_qaqc <- function(realtime_file,
 
     d1$TIMESTAMP <- lubridate::with_tz(TIMESTAMP_in,tz = local_tzone)
 
-    d2 <- readr::read_csv(qaqc_file, guess_max = 100000, col_types = readr::cols())
+    d2 <- readr::read_csv(qaqc_file,
+                          col_types = list(Reservoir = readr::col_character(),
+                                           Site  = readr::col_character(),
+                                           DateTime = readr::col_datetime(format = ""),
+                                           Record = readr::col_integer(),
+                                           CR3000_Batt_V = readr::col_double(),
+                                           CR3000Panel_temp_C  = readr::col_double(),
+                                           PAR_Average_umol_s_m2  = readr::col_double(),
+                                           PAR_Total_mmol_m2  = readr::col_double(),
+                                           BP_Average_kPa  = readr::col_double(),
+                                           AirTemp_Average_C  = readr::col_double(),
+                                           RH_percent  = readr::col_double(),
+                                           Rain_Total_mm  = readr::col_double(),
+                                           WindSpeed_Average_m_s  = readr::col_double(),
+                                           WindDir_degrees  = readr::col_double(),
+                                           ShortwaveRadiationUp_Average_W_m2  = readr::col_double(),
+                                           ShortwaveRadiationDown_Average_W_m2  = readr::col_double(),
+                                           InfaredRadiationUp_Average_W_m2  = readr::col_double(),
+                                           InfaredRadiationDown_Average_W_m2  = readr::col_double(),
+                                           Albedo_Average_W_m2  = readr::col_double(),
+                                           Flag_PAR_Average_umol_s_m2 = readr::col_integer(),
+                                           Note_PAR_Average_umol_s_m2  = readr::col_character(),
+                                           Flag_PAR_Total_mmol_m2 = readr::col_integer(),
+                                           Note_PAR_Total_mmol_m2  = readr::col_character(),
+                                           Flag_BP_Average_kPa = readr::col_integer(),
+                                           Note_BP_Average_kPa  = readr::col_character(),
+                                           Flag_AirTemp_Average_C = readr::col_integer(),
+                                           Note_AirTemp_Average_C  = readr::col_character(),
+                                           Flag_RH_percent = readr::col_integer(),
+                                           Note_RH_percent  = readr::col_character(),
+                                           Flag_Rain_Total_mm = readr::col_integer(),
+                                           Note_Rain_Total_mm  = readr::col_character(),
+                                           Flag_WindSpeed_Average_m_s = readr::col_integer(),
+                                           Note_WindSpeed_Average_m_s  = readr::col_character(),
+                                           Flag_WindDir_degrees = readr::col_integer(),
+                                           Note_WindDir_degrees  = readr::col_character(),
+                                           Flag_ShortwaveRadiationUp_Average_W_m2 = readr::col_integer(),
+                                           Note_ShortwaveRadiationUp_Average_W_m2  = readr::col_character(),
+                                           Flag_ShortwaveRadiationDown_Average_W_m2 = readr::col_integer(),
+                                           Note_ShortwaveRadiationDown_Average_W_m2  = readr::col_character(),
+                                           Flag_InfaredRadiationUp_Average_W_m2 = readr::col_integer(),
+                                           Note_InfaredRadiationUp_Average_W_m2  = readr::col_character(),
+                                           Flag_InfaredRadiationDown_Average_W_m2 = readr::col_integer(),
+                                           Note_InfaredRadiationDown_Average_W_m2  = readr::col_character(),
+                                           Flag_Albedo_Average_W_m2 = readr::col_integer(),
+                                           Note_Albedo_Average_W_m2  = readr::col_character()))
+
 
     TIMESTAMP_in <- lubridate::force_tz(d2$DateTime, tzone = input_file_tz)
 
@@ -41,9 +106,28 @@ met_qaqc <- function(realtime_file,
 
   }else{
 
-    d1 <- read.csv(realtime_file, skip = 3)
-    d_names <- read.csv(realtime_file, skip = 1)
-    names(d1) <- names(d_names)
+    d1 <- readr::read_csv(realtime_file,
+                          col_names = c("TIMESTAMP","RECORD","BattV","PTemp_C","PAR_Den_Avg","PAR_Tot_Tot","BP_kPa_Avg","AirTC_Avg","RH","Rain_mm_Tot","WS_ms_Avg","WindDir","SR01Up_Avg","SR01Dn_Avg","IR01UpCo_Avg","IR01DnCo_Avg","NR01TK_Avg","Albedo_Avg"),
+                          col_types = list(
+                            TIMESTAMP = readr::col_datetime(format = ""),
+                            RECORD = readr::col_integer(),
+                            BattV = readr::col_double(),
+                            PTemp_C = readr::col_double(),
+                            PAR_Den_Avg = readr::col_double(),
+                            PAR_Tot_Tot = readr::col_double(),
+                            BP_kPa_Avg = readr::col_double(),
+                            AirTC_Avg = readr::col_double(),
+                            RH = readr::col_double(),
+                            Rain_mm_Tot = readr::col_double(),
+                            WS_ms_Avg = readr::col_double(),
+                            WindDir = readr::col_double(),
+                            SR01Up_Avg = readr::col_double(),
+                            SR01Dn_Avg = readr::col_double(),
+                            IR01UpCo_Avg = readr::col_double(),
+                            IR01DnCo_Avg = readr::col_double(),
+                            NR01TK_Avg = readr::col_double(),
+                            Albedo_Avg = readr::col_double())) %>%
+      dplyr::slice(-c(1,2,3,4))
 
     #d1 <- d1[-85572, ]
 
@@ -115,8 +199,8 @@ met_qaqc <- function(realtime_file,
   d$air_pressure <- d$air_pressure * 1000
 
   d$specific_humidity <-  noaaGEFSpoint:::rh2qair(rh = d$relative_humidity,
-                                                 T = d$air_temperature,
-                                                 press = d$air_pressure)
+                                                  T = d$air_temperature,
+                                                  press = d$air_pressure)
 
   d <- d %>%
     select(time, air_temperature, air_pressure, relative_humidity, surface_downwelling_longwave_flux_in_air, surface_downwelling_shortwave_flux_in_air, precipitation_flux, specific_humidity, wind_speed)
@@ -163,20 +247,20 @@ met_qaqc <- function(realtime_file,
 
   }else{
 
-  t <- seq(min(d$time), max(d$time), by = "1 hour")
-  cont_time <- tibble(time = t)
+    t <- seq(min(d$time), max(d$time), by = "1 hour")
+    cont_time <- tibble(time = t)
 
-  d_full <- dplyr::left_join(cont_time, d, by = "time")
+    d_full <- dplyr::left_join(cont_time, d, by = "time")
 
-  d_full <- d_full %>%
-    mutate(air_temperature = imputeTS::na_interpolation(air_temperature, option = "linear"),
-           air_pressure = imputeTS::na_interpolation(air_pressure, option = "linear"),
-           relative_humidity = imputeTS::na_interpolation(relative_humidity, option = "linear"),
-           surface_downwelling_longwave_flux_in_air = imputeTS::na_interpolation(surface_downwelling_longwave_flux_in_air, option = "linear"),
-           surface_downwelling_shortwave_flux_in_air = imputeTS::na_interpolation(surface_downwelling_shortwave_flux_in_air, option = "linear"),
-           precipitation_flux = imputeTS::na_interpolation(precipitation_flux, option = "linear"),
-           specific_humidity = imputeTS::na_interpolation(specific_humidity, option = "linear"),
-           wind_speed = imputeTS::na_interpolation(wind_speed, option = "linear"))
+    d_full <- d_full %>%
+      mutate(air_temperature = imputeTS::na_interpolation(air_temperature, option = "linear"),
+             air_pressure = imputeTS::na_interpolation(air_pressure, option = "linear"),
+             relative_humidity = imputeTS::na_interpolation(relative_humidity, option = "linear"),
+             surface_downwelling_longwave_flux_in_air = imputeTS::na_interpolation(surface_downwelling_longwave_flux_in_air, option = "linear"),
+             surface_downwelling_shortwave_flux_in_air = imputeTS::na_interpolation(surface_downwelling_shortwave_flux_in_air, option = "linear"),
+             precipitation_flux = imputeTS::na_interpolation(precipitation_flux, option = "linear"),
+             specific_humidity = imputeTS::na_interpolation(specific_humidity, option = "linear"),
+             wind_speed = imputeTS::na_interpolation(wind_speed, option = "linear"))
   }
 
   model_name <- "observed-met"

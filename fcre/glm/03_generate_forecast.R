@@ -47,6 +47,9 @@ if(forecast_hour < 10){forecast_hour <- paste0("0",forecast_hour)}
 forecast_path <- file.path(config$data_location, "NOAAGEFS_1hr",config$lake_name_code,lubridate::as_date(forecast_start_datetime_UTC),forecast_hour)
 
 
+spatial_downscale_coeff <- list(AirTemp = c(21.2470, 0.9271),
+                                ShortWave = c(-2.6182, 0.8398),
+                                LongWave = c(33.5549, 0.9779))
 
 met_file_names <- flare::generate_glm_met_files(obs_met_file = observed_met_file,
                                                 out_dir = config$run_config$execute_location,
@@ -54,7 +57,11 @@ met_file_names <- flare::generate_glm_met_files(obs_met_file = observed_met_file
                                                 local_tzone = config$local_tzone,
                                                 start_datetime_local = start_datetime_local,
                                                 end_datetime_local = end_datetime_local,
-                                                forecast_start_datetime = forecast_start_datetime_local)
+                                                forecast_start_datetime = forecast_start_datetime_local,
+                                                use_forecasted_met = TRUE,
+                                                spatial_downscale = TRUE,
+                                                spatial_downscale_coeff= spatial_downscale_coeff)
+
 
 #Inflow Drivers (already done)
 
@@ -71,7 +78,8 @@ inflow_outflow_files <- flare::create_glm_inflow_outflow_files(inflow_file = cle
                                                                future_inflow_flow_error = config$future_inflow_flow_error,
                                                                future_inflow_temp_coeff = config$future_inflow_temp_coeff,
                                                                future_inflow_temp_error = config$future_inflow_temp_error,
-                                                               use_future_inflow = config$use_future_inflow)
+                                                               use_future_inflow = config$use_future_inflow,
+                                                               state_names = states_config$state_names)
 
 inflow_file_names <- inflow_outflow_files$inflow_file_name
 outflow_file_names <- inflow_outflow_files$outflow_file_name
@@ -89,9 +97,9 @@ full_time_forecast <- seq(start_datetime_local, end_datetime_local, by = "1 day"
 obs[ , which(full_time_forecast >= forecast_start_datetime_local), ] <- NA
 
 
-tmp <- flare::generate_states_to_obs_mapping(states_config, obs_config)
-states_config$states_to_obs_mapping <- tmp$states_to_obs_mapping
-states_config$states_to_obs <- tmp$states_to_obs
+states_config <- flare::generate_states_to_obs_mapping(states_config, obs_config)
+
+model_sd <- flare::initiate_model_error(config, states_config, forecast_location)
 
 #Set inital conditions
 init <- flare::generate_initial_conditions(states_config,
@@ -115,7 +123,7 @@ enkf_output <- flare::run_enkf_forecast(states_init = init$states,
                                aux_states_init = aux_states_init,
                                obs = obs,
                                obs_sd = obs_config$obs_sd,
-                               model_sd = states_config$model_sd,
+                               model_sd = model_sd,
                                working_directory = config$run_config$execute_location,
                                met_file_names = met_file_names,
                                inflow_file_names = inflow_file_names,

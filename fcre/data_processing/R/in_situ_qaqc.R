@@ -8,6 +8,8 @@ in_situ_qaqc <- function(insitu_obs_fname,
                          lake_name_code,
                          config){
 
+  print("QAQC Catwalk")
+
   d <- temp_oxy_chla_qaqc(realtime_file = insitu_obs_fname[1],
                           qaqc_file = insitu_obs_fname[2],
                           maintenance_file = maintenance_file,
@@ -18,6 +20,7 @@ in_situ_qaqc <- function(insitu_obs_fname,
 
   if(exists("ctd_fname")){
     if(!is.na(ctd_fname)){
+      print("QAQC CTD")
       d_ctd <- extract_CTD(fname = ctd_fname,
                            input_file_tz = "EST",
                            local_tzone = config$local_tzone,
@@ -26,8 +29,11 @@ in_situ_qaqc <- function(insitu_obs_fname,
       d <- rbind(d,d_ctd)
     }
   }
+
+
   if(exists("nutrients_fname")){
     if(!is.na(nutrients_fname)){
+      print("QAQC Nutrients")
       d_nutrients <- extract_nutrients(fname = nutrients_fname,
                                        input_file_tz = "EST",
                                        local_tzone = config$local_tzone,
@@ -35,8 +41,11 @@ in_situ_qaqc <- function(insitu_obs_fname,
       d <- rbind(d,d_nutrients)
     }
   }
+
+
   if(exists("ch4_fname")){
     if(!is.na(ch4_fname)){
+      print("QAQC CH4")
       d_ch4 <- extract_ch4(fname = ch4_fname,
                            input_file_tz = "EST",
                            local_tzone  = config$local_tzone,
@@ -44,6 +53,7 @@ in_situ_qaqc <- function(insitu_obs_fname,
       d <- rbind(d,d_ch4)
     }
   }
+
 
   first_day <- lubridate::as_datetime(paste0(lubridate::as_date(min(d$timestamp)), " ", config$averaging_period_starting_hour))
   first_day <- lubridate::force_tz(first_day, tzone = config$local_tzone)
@@ -54,6 +64,8 @@ in_situ_qaqc <- function(insitu_obs_fname,
   full_time_local <- seq(first_day, last_day, by = "1 day")
 
   d_clean <- NULL
+
+
   for(i in 1:length(config$target_variable)){
     print(paste0("Extracting ",config$target_variable[i]))
     #depth_breaks <- sort(c(bins1, bins2))
@@ -104,4 +116,7 @@ in_situ_qaqc <- function(insitu_obs_fname,
   d_clean <- d_clean %>% select(date, hour, depth, value, variable)
 
   readr::write_csv(d_clean, cleaned_observations_file_long)
+
+  #rm(d_clean, d, d_secchi, d_ch4, d_nutrients, d_ctd)
+  #gc()
 }
