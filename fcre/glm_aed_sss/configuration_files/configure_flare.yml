@@ -119,8 +119,9 @@ sss_inflow_factor: 0.25
 ##############################
 ensemble_size:  105
 localization_distance: .na #distance in meters were covariances in the model error are used
-vert_decorr_length: 4.0
+vert_decorr_length: 2.0
 no_negative_states: TRUE
+assimilate_first_step: FALSE
 
 #################################
 # Parameter calibration information

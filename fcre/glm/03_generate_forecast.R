@@ -1,12 +1,9 @@
 ##### Read configuration files
-
-#forecast_location <- "/Users/quinn/Dropbox/Research/SSC_forecasting/FLARE_package/flare_lakes/fcre/glm/"
 config <- yaml::read_yaml(file.path(forecast_location, "configuration_files","configure_flare.yml"))
 run_config <- yaml::read_yaml(file.path(forecast_location, "configuration_files","run_configuration.yml"))
 
 config$run_config <- run_config
 config$run_config$forecast_location <- forecast_location
-#config$run_config$execute_location <- file.path(forecast_location,"working_directory")
 
 if(!dir.exists(config$run_config$execute_location)){
   dir.create(config$run_config$execute_location)
@@ -46,10 +43,10 @@ forecast_hour <- lubridate::hour(forecast_start_datetime_UTC)
 if(forecast_hour < 10){forecast_hour <- paste0("0",forecast_hour)}
 forecast_path <- file.path(config$data_location, "NOAAGEFS_1hr",config$lake_name_code,lubridate::as_date(forecast_start_datetime_UTC),forecast_hour)
 
-
 spatial_downscale_coeff <- list(AirTemp = c(21.2470, 0.9271),
                                 ShortWave = c(-2.6182, 0.8398),
-                                LongWave = c(33.5549, 0.9779))
+                                LongWave = c(33.5549, 0.9779),
+                                WindSpeed = c(1.03295, 0.44628))
 
 met_file_names <- flare::generate_glm_met_files(obs_met_file = observed_met_file,
                                                 out_dir = config$run_config$execute_location,
@@ -102,11 +99,18 @@ states_config <- flare::generate_states_to_obs_mapping(states_config, obs_config
 model_sd <- flare::initiate_model_error(config, states_config, forecast_location)
 
 #Set inital conditions
-init <- flare::generate_initial_conditions(states_config,
-                                           obs_config,
-                                           pars_config,
-                                           obs,
-                                           config)
+if(is.na(run_config$restart_file)){
+  init <- flare::generate_initial_conditions(states_config,
+                                             obs_config,
+                                             pars_config,
+                                             obs,
+                                             config)
+}else{
+  init <- flare::generate_restart_initial_conditions(
+    restart_file = run_config$restart_file,
+    state_names = states_config$state_names,
+    par_names = pars_config$par_names_save)
+}
 
 aux_states_init <- list()
 aux_states_init$snow_ice_thickness <- init$snow_ice_thickness
@@ -147,4 +151,10 @@ flare::create_flare_eml(file_name = saved_file,
                         enkf_output)
 
 unlist(config$run_config$execute_location, recursive = TRUE)
+
+#run_config$start_day_local <- run_config$forecast_start_day_local
+#run_config$forecast_start_day_local <- as.character(lubridate::as_date(run_config$forecast_start_day_local) + lubridate::days(1))
+#run_config$restart_file <- saved_file
+#run_config$forecast_horizon <- 2
+#yaml::write_yaml(run_config, file = file.path(forecast_location, "configuration_files","run_configuration.yml"))
 

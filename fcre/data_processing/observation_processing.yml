@@ -83,7 +83,7 @@ do_sensor_2_ctd_do_9: [0, 1] #c(11.0971, 0.9156)
 ctd_2_exo_sensor_chla: [0, 1]  #c(-2.0430, 2.5314) #c(-1.582, 1.335)
 ctd_2_exo_sensor_do: [0, 1] #c(-10.770, 1.061)
 exo_sensor_2_grab_sample_fdom: [-38.95, 22.47]
-focal_depths: 1.6
+focal_depths: .na #1.6
 maintenance_file: /mia-data/CAT_MaintenanceLog.txt
 
 pull_from_git: TRUE

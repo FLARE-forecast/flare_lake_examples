@@ -113,10 +113,11 @@ sss_inflow_factor: 0.25
 ##############################
 ##  EnKF setup
 ##############################
-ensemble_size:  221
+ensemble_size:  441 #221 #441
 localization_distance: .na #distance in meters were covariances in the model error are used
-vert_decorr_length: 2.0
+vert_decorr_length: 5.0
 no_negative_states: TRUE
+assimilate_first_step: FALSE
 
 #################################
 # Parameter calibration information

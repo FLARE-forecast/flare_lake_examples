@@ -38,9 +38,14 @@
    timefmt = 2
    start = '2013-05-15 12:00'
    stop = '2018-12-31 12:00'
-   dt = 3600
+   dt = 1800
    num_days = 1
    timezone = -5
+/
+&output
+   out_dir = "./"
+   out_fn = "output"
+   nsave = 48
 /
 &init_profiles
    num_depths = 28
@@ -68,17 +73,15 @@
    cloud_mode = 4
    meteo_fl = '/Users/quinn/Dropbox/Research/SSC_forecasting/glm_aed_forecasts/model_output_historical/FCR_GLM_NLDAS_010113_123119_GMTadjusted.csv'
    subdaily = .true.
-   wind_factor = 1
+   wind_factor = 1.0
    sw_factor = 1.0
-   lw_factor = 1.1
+   lw_factor = 1.0
    at_factor = 1
    rh_factor = 1
    rain_factor = 1
    cd = 0.0013
    ce = 0.0013
    ch = 0.0013
-   rain_threshold = 0.04
-   runoff_coef = 0.2
    time_fmt = 'YYYY-MM-DD hh:mm:ss'
 /
 &inflow
@@ -87,7 +90,8 @@
    subm_flag = .true.
    strm_hf_angle = 55
    strmbd_slope = 0.05
-   strmbd_drag = 9.0
+   strmbd_drag = 0.03
+   subm_elev = 9.0
    inflow_factor = 1.0
    inflow_fl = 'inflow_file1.csv'
    inflow_varnum = 3
@@ -107,17 +111,14 @@
    snow_rho_max = 500
    snow_rho_min = 100
 /
-!&sediment
-!   benthic_mode = 2
-!   sed_heat_model = 1
-!   n_zones = 2
-!   zone_heights = 5, 9.5
-!   sed_heat_Ksoil = 1.2, 1.2
-!   sed_temp_depth = 0.5, 0.5
-!   sed_temp_mean = 10,15!11.16682669,13.52480062!11.09137447,13.49593699!8.982533531, 8.614077839
-!   sed_temp_amplitude = 0,0!3.462898198,7.057355328!3.090273694,8.223867241!3.828005548, 6.770951105
-   !sed_temp_peak_doy = 278.4380074,276.9746504!267.3400911,265.311257!263.9436016,264.8249604!260.7401994, 268.5430713
-   !sed_temp_mean = 11.39072901,14.85279613!11.16682669,13.52480062!11.09137447,13.49593699!8.982533531, 8.614077839
-   !sed_temp_amplitude = 0,0!3.462898198,7.057355328!3.090273694,8.223867241!3.828005548, 6.770951105
-!   sed_temp_peak_doy = 278,278!267.3400911,265.311257!263.9436016,264.8249604!260.7401994, 268.5430713
-!/
+&sediment
+   benthic_mode = 2
+   sed_heat_model = 1
+   n_zones = 2
+   zone_heights = 5, 9.5
+   sed_heat_Ksoil = 1.2, 1.2
+   sed_temp_depth = 0.5, 0.5
+   sed_temp_mean = 10,15!11.16682669,13.52480062!11.09137447,13.49593699!8.982533531, 8.614077839
+   sed_temp_amplitude = 0,0!3.462898198,7.057355328!3.090273694,8.223867241!3.828005548, 6.770951105
+   sed_temp_peak_doy = 278.4380074,276.9746504!267.3400911,265.311257!263.9436016,264.8249604!260.7401994, 268.5430713
+/
