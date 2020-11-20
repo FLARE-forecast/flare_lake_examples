@@ -152,9 +152,8 @@ flare::create_flare_eml(file_name = saved_file,
 
 unlist(config$run_config$execute_location, recursive = TRUE)
 
-#run_config$start_day_local <- run_config$forecast_start_day_local
-#run_config$forecast_start_day_local <- as.character(lubridate::as_date(run_config$forecast_start_day_local) + lubridate::days(1))
-#run_config$restart_file <- saved_file
-#run_config$forecast_horizon <- 2
-#yaml::write_yaml(run_config, file = file.path(forecast_location, "configuration_files","run_configuration.yml"))
+run_config$start_day_local <- run_config$forecast_start_day_local
+run_config$forecast_start_day_local <- as.character(lubridate::as_date(run_config$forecast_start_day_local) + lubridate::days(1))
+run_config$restart_file <- saved_file
+yaml::write_yaml(run_config, file = file.path(forecast_location, "configuration_files","run_configuration.yml"))
 
