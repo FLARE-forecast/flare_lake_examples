@@ -43,11 +43,6 @@ forecast_hour <- lubridate::hour(forecast_start_datetime_UTC)
 if(forecast_hour < 10){forecast_hour <- paste0("0",forecast_hour)}
 forecast_path <- file.path(config$data_location, "NOAAGEFS_1hr",config$lake_name_code,lubridate::as_date(forecast_start_datetime_UTC),forecast_hour)
 
-spatial_downscale_coeff <- list(AirTemp = c(21.2470, 0.9271),
-                                ShortWave = c(-2.6182, 0.8398),
-                                LongWave = c(33.5549, 0.9779),
-                                WindSpeed = c(1.03295, 0.44628))
-
 met_file_names <- flare::generate_glm_met_files(obs_met_file = observed_met_file,
                                                 out_dir = config$run_config$execute_location,
                                                 forecast_dir = forecast_path,
@@ -55,9 +50,7 @@ met_file_names <- flare::generate_glm_met_files(obs_met_file = observed_met_file
                                                 start_datetime_local = start_datetime_local,
                                                 end_datetime_local = end_datetime_local,
                                                 forecast_start_datetime = forecast_start_datetime_local,
-                                                use_forecasted_met = TRUE,
-                                                spatial_downscale = TRUE,
-                                                spatial_downscale_coeff= spatial_downscale_coeff)
+                                                use_forecasted_met = TRUE)
 
 
 #Inflow Drivers (already done)
