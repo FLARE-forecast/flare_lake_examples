@@ -22,6 +22,7 @@ manager_plot <- function(file_name,
   diagnostics_names <- output$diagnostics_names
   full_time_local <- output$full_time_local
   obs_long <- output$obs_long
+  depths <- output$depths
 
 
   dirname(file_name)
@@ -49,7 +50,7 @@ manager_plot <- function(file_name,
   points(full_time_local[3:18],prob_zero,type='o',ylim=c(0,100), xlab = 'date',ylab = 'Probablity of turnover')
   axis(1, at=full_time_local - hours(hour(full_time_local[1])),las=2, cex.axis=0.7, tck=-0.01,labels=FALSE)
   abline(v = full_time_local[forecast_index])
-  text(full_time_day_local[forecast_index-2],80,'past')
+  text(full_time_local[forecast_index] - lubridate::days(2),80,'past')
   text(full_time_local[4],80,'future')
   #HISTORICAL AND FUTURE TEMPERATURE
   if(length(depths) == 10){
