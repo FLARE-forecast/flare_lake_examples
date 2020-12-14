@@ -48,7 +48,7 @@ manager_plot <- function(file_name,
   forecast_index <- max(which(forecast == 0))
 
   points(full_time_local[3:18],prob_zero,type='o',ylim=c(0,100), xlab = 'date',ylab = 'Probablity of turnover')
-  axis(1, at=full_time_local - hours(hour(full_time_local[1])),las=2, cex.axis=0.7, tck=-0.01,labels=FALSE)
+  axis(1, at=full_time_local - lubridate::hours(hour(full_time_local[1])),las=2, cex.axis=0.7, tck=-0.01,labels=FALSE)
   abline(v = full_time_local[forecast_index])
   text(full_time_local[forecast_index] - lubridate::days(2),80,'past')
   text(full_time_local[4],80,'future')
@@ -124,7 +124,7 @@ manager_plot <- function(file_name,
   plot(full_time_local_plotting,rep(-99,length(full_time_local_plotting)),ylim=c(-5,35),xlim = c(full_time_local_plotting[1] - days(2), max(full_time_local_plotting)), xlab = 'date',ylab = expression(~degree~C))
   title(paste0('Water temperature forecast'),cex.main=0.9)
   tmp_day <- full_time_local[-1][1]
-  axis(1, at=full_time_local - hours(hour(full_time_local[1])),las=2, cex.axis=0.7, tck=-0.01,labels=FALSE)
+  axis(1, at=full_time_local - lubridate::hours(hour(full_time_local[1])),las=2, cex.axis=0.7, tck=-0.01,labels=FALSE)
   depth_colors_index = 0
   for(i in 1:length(depths)){
     if(length(which(depths[i]  == depths)) >= 1 ){
