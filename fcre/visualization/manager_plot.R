@@ -48,7 +48,7 @@ manager_plot <- function(file_name,
   forecast_index <- max(which(forecast == 0))
 
   points(full_time_local[3:18],prob_zero,type='o',ylim=c(0,100), xlab = 'date',ylab = 'Probablity of turnover')
-  axis(1, at=full_time_local - lubridate::hours(hour(full_time_local[1])),las=2, cex.axis=0.7, tck=-0.01,labels=FALSE)
+  axis(1, at=full_time_local - lubridate::hours(lubridate::hour(full_time_local[1])),las=2, cex.axis=0.7, tck=-0.01,labels=FALSE)
   abline(v = full_time_local[forecast_index])
   text(full_time_local[forecast_index] - lubridate::days(2),80,'past')
   text(full_time_local[4],80,'future')
@@ -121,10 +121,10 @@ manager_plot <- function(file_name,
   full_time_local_plotting <-seq(full_time_local[1] - lubridate::days(5), max(full_time_local), by = "1 day")
   forecast_index <- which(full_time_local_plotting == full_time_local[which.max(forecast == 0)])
 
-  plot(full_time_local_plotting,rep(-99,length(full_time_local_plotting)),ylim=c(-5,35),xlim = c(full_time_local_plotting[1] - days(2), max(full_time_local_plotting)), xlab = 'date',ylab = expression(~degree~C))
+  plot(full_time_local_plotting,rep(-99,length(full_time_local_plotting)),ylim=c(-5,35),xlim = c(full_time_local_plotting[1] - lubridate::days(2), max(full_time_local_plotting)), xlab = 'date',ylab = expression(~degree~C))
   title(paste0('Water temperature forecast'),cex.main=0.9)
   tmp_day <- full_time_local[-1][1]
-  axis(1, at=full_time_local - lubridate::hours(hour(full_time_local[1])),las=2, cex.axis=0.7, tck=-0.01,labels=FALSE)
+  axis(1, at=full_time_local - lubridate::hours(lubridate::hour(full_time_local[1])),las=2, cex.axis=0.7, tck=-0.01,labels=FALSE)
   depth_colors_index = 0
   for(i in 1:length(depths)){
     if(length(which(depths[i]  == depths)) >= 1 ){
@@ -157,6 +157,6 @@ manager_plot <- function(file_name,
                     "DeepSkyBlue4", "blue2", "blue4"), cex=1, y.intersp=1, x.intersp=0.001, inset=c(0,0), xpd=T, bty='n')
   legend('topright', c('mean','confidence bounds'), lwd=1.5, lty=c('dashed','dotted'),bty='n',cex = 1)
 
-  mtext(paste0('Falling Creek Reservoir\n',month(tmp_day),'/',day(tmp_day),'/',year(tmp_day)), side = 3, line = -2, outer = TRUE, font = 2)
+  mtext(paste0('Falling Creek Reservoir\n',lubridate::month(tmp_day),'/',lubridate::day(tmp_day),'/',lubridate::year(tmp_day)), side = 3, line = -2, outer = TRUE, font = 2)
   dev.off()
 }
