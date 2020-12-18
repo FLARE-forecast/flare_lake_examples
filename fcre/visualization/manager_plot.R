@@ -37,9 +37,14 @@ manager_plot <- function(file_name,
 
   temp <- state_list[["temp"]]
 
-  prob_zero <- rep(NA,length(seq(3,18,1)))
-  for(i in 3:18){
-    prob_zero[i-2] = 100*length(which(temp[i,turnover_index_1,] - temp[i,turnover_index_2,] < 1))/length((temp[i,1,]))
+
+  forecast_start <- min(which(forecast == 1))
+  forecast_end <- length(forecast)
+  prob_zero <- rep(NA,length(seq(forecast_start,forecast_end,1)))
+
+  if(length(which(forecast == 1)) > 0){
+  for(i in forecast_start:forecast_end){
+    prob_zero[i-(forecast_start - 1)] = 100*length(which(temp[i,turnover_index_1,] - temp[i,turnover_index_2,] < 1))/length((temp[i,1,]))
   }
 
   plot(full_time_local,rep(-99,length(full_time_local)),ylim=c(0,100),xlab = 'date',ylab = '% chance')
@@ -47,11 +52,13 @@ manager_plot <- function(file_name,
 
   forecast_index <- max(which(forecast == 0))
 
-  points(full_time_local[3:18],prob_zero,type='o',ylim=c(0,100), xlab = 'date',ylab = 'Probablity of turnover')
+  points(full_time_local[forecast_start:forecast_end],prob_zero,type='o',ylim=c(0,100), xlab = 'date',ylab = 'Probablity of turnover')
   axis(1, at=full_time_local - lubridate::hours(lubridate::hour(full_time_local[1])),las=2, cex.axis=0.7, tck=-0.01,labels=FALSE)
   abline(v = full_time_local[forecast_index])
   text(full_time_local[forecast_index] - lubridate::days(2),80,'past')
   text(full_time_local[4],80,'future')
+
+  }
   #HISTORICAL AND FUTURE TEMPERATURE
   if(length(depths) == 10){
     depth_colors <- c("firebrick4",
