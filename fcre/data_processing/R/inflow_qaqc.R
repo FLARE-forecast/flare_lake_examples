@@ -43,6 +43,8 @@ inflow_qaqc <- function(realtime_file,
 
   flow <- readr::read_csv(qaqc_file, guess_max = 1000000, col_types = readr::cols()) %>%
     dplyr::rename("timestamp" = DateTime) %>%
+    dplyr::mutate(timestamp = lubridate::as_datetime(timestamp, tz = input_file_tz),
+                  timestamp = lubridate::with_tz(timestamp, tzone = "UTC")) %>%
     dplyr::select(timestamp, WVWA_Flow_cms, WVWA_Temp_C, VT_Flow_cms, VT_Temp_C) %>%
     dplyr::mutate(day = day(timestamp),
            year = year(timestamp),
@@ -85,7 +87,7 @@ inflow_qaqc <- function(realtime_file,
            "time" = TIMESTAMP,
            "TEMP" = wtr_weir) %>%
     mutate(time = force_tz(time, tzone = input_file_tz),
-           time = with_tz(time, tzone = local_tzone)) %>%
+           time = with_tz(time, tzone = "UTC")) %>%
     filter(time > last(inflow_temp_flow$time)) %>%
     mutate(head = ((65.822 * psi_corr) - 4.3804) / 100,
            FLOW = 2.391 * (head^2.5)) %>%
@@ -199,10 +201,6 @@ inflow_qaqc <- function(realtime_file,
   #   geom_point() +
   #   geom_line() +
   #   facet_wrap(~Nutrient, scales = "free")
-
-
-  #inflow_clean <- inflow_clean %>%
-  #  filter(time < as_datetime("2018-01-01 00:00:00"))
 
 
   readr::write_csv(inflow_clean, cleaned_inflow_file)

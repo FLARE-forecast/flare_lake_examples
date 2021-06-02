@@ -21,6 +21,8 @@ extract_ch4 <- function(fname,
     filter(!is.na(value)) %>%
     select(timestamp , depth, value, variable, method)
 
+  d <- d %>% mutuate(timestamp = lubridate::with_tz(timestamp, tzone = "UTC"))
+
   if(!is.na(focal_depths)){
     d <- d %>% filter(depth %in% focal_depths)
   }

@@ -17,5 +17,7 @@ extract_secchi <- function(fname,
     filter(!is.na(value)) %>%
     select(timestamp , depth, value, variable)
 
+  d <- d %>% mutuate(timestamp = lubridate::with_tz(timestamp, tzone = "UTC"))
+
   return(d)
 }

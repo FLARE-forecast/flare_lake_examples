@@ -234,10 +234,10 @@ temp_oxy_chla_qaqc <- function(realtime_file,
     d2 <- read.csv(qaqc_file, na.strings = 'NA', stringsAsFactors = FALSE)
 
     TIMESTAMP_in <- as_datetime(d1$DateTime,tz = input_file_tz)
-    d1$TIMESTAMP <- with_tz(TIMESTAMP_in,tz = local_tzone)
+    d1$TIMESTAMP <- with_tz(TIMESTAMP_in,tz = "UTC")
 
     TIMESTAMP_in <- as_datetime(d2$DateTime,tz = input_file_tz)
-    d2$TIMESTAMP <- with_tz(TIMESTAMP_in,tz = local_tzone)
+    d2$TIMESTAMP <- with_tz(TIMESTAMP_in,tz = "UTC")
 
     d1 <- d1[which(d1$TIMESTAMP > d2$TIMESTAMP[nrow(d2)] | d1$TIMESTAMP < d2$TIMESTAMP[1]), ]
 
@@ -275,7 +275,7 @@ temp_oxy_chla_qaqc <- function(realtime_file,
     d1 <- catdata
 
     TIMESTAMP_in <- as_datetime(d1$DateTime,tz = input_file_tz)
-    d1$TIMESTAMP <- with_tz(TIMESTAMP_in,tz = local_tzone)
+    d1$TIMESTAMP <- with_tz(TIMESTAMP_in,tz = "UTC")
 
     d <-  data.frame(TIMESTAMP = d1$TIMESTAMP, wtr_surface = d1$ThermistorTemp_C_surface,
                      wtr_1 = d1$ThermistorTemp_C_1, wtr_2 = d1$ThermistorTemp_C_2,
@@ -316,7 +316,7 @@ temp_oxy_chla_qaqc <- function(realtime_file,
            hour = as.numeric(hour)) %>%
     dplyr::mutate(day = ifelse(as.numeric(day) < 10, paste0("0",day),day),
            hour = ifelse(as.numeric(hour) < 10, paste0("0",hour),hour)) %>%
-    dplyr::mutate(timestamp = as_datetime(paste0(year,"-",month,"-",day," ",hour,":00:00"),tz = local_tzone)) %>%
+    dplyr::mutate(timestamp = as_datetime(paste0(year,"-",month,"-",day," ",hour,":00:00"),tz = "UTC")) %>%
     dplyr::arrange(timestamp)
 
 

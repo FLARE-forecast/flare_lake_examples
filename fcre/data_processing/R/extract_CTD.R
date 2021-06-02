@@ -45,7 +45,7 @@ extract_CTD <- function(fname,
     pivot_longer(cols = c("temperature", "oxygen", "chla"), names_to = "variable", values_to = "value") %>%
     mutate(method = "ctd") %>%
     select(timestamp , depth, value, variable, method) %>%
-    mutate(timestamp = lubridate::as_datetime(timestamp, tz = local_tzone))
+    mutate(timestamp = lubridate::as_datetime(timestamp, tz = "UTC"))
 
   if(!is.na(focal_depths)){
     d_ctd <- d_ctd %>% filter(depth %in% focal_depths)
